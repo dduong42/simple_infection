@@ -1,0 +1,25 @@
+A simple infection method
+-------------------------
+
+This method was inspired by Silvio Cesare (http://vxheaven.org/lib/vsc02.html).
+(Read the "The non ELF infector file virus (file infection)" section)
+
+In order to make the executable strip safe, the idea is to load the host in memory.
+
+$ make
+$ ls -l target
+-rwxr-xr-x 1 dbourbaki dbourbaki 6768 Feb 23 11:35 target
+
+--> infected.s
+%define SIZE 6768
+
+$ make infected
+nasm -f bin infected.s -o infected
+cat target >> infected
+$ ./infected
+Infected !
+I am the target
+$ strip infected
+$ ./infected
+Infected !
+I am the target
