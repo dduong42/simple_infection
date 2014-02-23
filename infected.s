@@ -1,4 +1,8 @@
 %define SIZE 6768
+%define WRITE 1
+%define OPEN 2
+%define CLOSE 3
+%define EXECVE 59
 
 BITS 64
 ORG 0x400000
@@ -73,17 +77,17 @@ dq  entry_point                                     ; p_vaddr
 dq  entry_point                                     ; p_paddr
 dq  end - entry_point + SIZE                        ; p_filesz
 dq  end - entry_point + SIZE                        ; p_memsz
-dq  0x200000                                        ; p_align;
+dq  0x200000                                        ; p_align
 end_ph:
 
 entry_point:
-mov     rax, 1
+mov     rax, WRITE
 mov     rdi, 1
 mov     rsi, str
 mov     rdx, end - str
 syscall
 
-mov     rax, 2                                      ; open
+mov     rax, OPEN
 mov     rdi, file
 mov     rsi, 578                                    ; O_RDWR|O_CREAT|O_TRUNC
 mov     rdx, 111o
@@ -95,10 +99,10 @@ mov     rsi, end
 mov     rdx, SIZE
 syscall
 
-mov     rax, 3
+mov     rax, CLOSE
 syscall
 
-mov     rax, 59
+mov     rax, EXECVE
 mov     rdi, file
 xor     rdx, rdx
 push    rdx
